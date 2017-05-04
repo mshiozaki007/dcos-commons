@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.mesosphere.sdk.scheduler.recovery.FailureUtils;
 import org.apache.mesos.Protos;
 import org.apache.mesos.Protos.Offer;
 import org.apache.mesos.Protos.Resource;
@@ -105,6 +106,9 @@ public class ResourceCleaner {
         Collection<Resource> resources = new ArrayList<>();
 
         for (Protos.TaskInfo taskInfo : stateStore.fetchTasks()) {
+            if (FailureUtils.isLabeledAsFailed(taskInfo)) {
+                continue;
+            }
             // get all resources from both the task level and the executor level
             resources.addAll(taskInfo.getResourcesList());
             if (taskInfo.hasExecutor()) {

@@ -260,29 +260,29 @@ plans:
   deploy:
     strategy: serial
     phases:
-      jn-deploy:
+      journal:
         strategy: {{DEPLOY_STRATEGY}}
         pod: journal
-      nn-deploy:
+      name:
         strategy: serial
         pod: name
         steps:
           - 0: [[format], [node]]
           - 1: [[bootstrap], [node]]
-      zkfc-deploy:
+      zkfc:
         strategy: serial
         pod: name
         steps:
           - 0: [[zkfc-format], [zkfc]]
-          - 1: [[zkfc]]
-      dn-deploy:
+          - default: [[zkfc]]
+      data:
         strategy: {{DEPLOY_STRATEGY}}
         pod: data
 
-  replace-nn:
+  replace:
     strategy: serial
     phases:
-      nn-deploy:
+      name:
         strategy: serial
         pod: name
         steps:
